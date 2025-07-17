@@ -1,15 +1,18 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:store_app/models/product_model.dart';
 import 'package:store_app/screens/home_page.dart';
-import 'package:store_app/services/all_products_service.dart';
 
 void main() async {
   runApp(const StoreApp());
-  List<ProductModel> produts = [];
-  produts = await AllProductsService().getAllProducts();
-  log(produts.toString());
+  // List<ProductModel> produts = [];
+  // produts = await AllProductsService().getAllProducts();
+  // log(produts.toString());
+  // List<dynamic> categories = await AllCategoriesService().getAllCategories();
+  // log(categories.toString());
+  // List<ProductModel> produts = [];
+  // produts = await CategoriesService().getProductsByCategory(
+  //   categoryName: 'electronics',
+  // );
+  // log(produts.toString());
 }
 
 class StoreApp extends StatelessWidget {
