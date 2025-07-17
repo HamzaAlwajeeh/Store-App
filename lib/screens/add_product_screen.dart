@@ -1,5 +1,11 @@
+import 'dart:developer';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:store_app/helper/custome_snake_bar.dart';
+import 'package:store_app/models/product_model.dart';
+import 'package:store_app/services/add_product_service.dart';
 import 'package:store_app/services/all_categories_service.dart';
 import 'package:store_app/widgets/custom_button.dart';
 import 'package:store_app/widgets/custom_form_field.dart';
@@ -13,8 +19,11 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  GlobalKey<FormState> formKey = GlobalKey();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   String? title, desc, price, image, category;
   List<dynamic> categories = [];
+  bool isLoading = false;
   @override
   void initState() {
     fechAllCategories();
@@ -33,21 +42,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
   String? categoryValue;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Add New Prosuct'),
-        surfaceTintColor: Colors.transparent,
-        scrolledUnderElevation: 0,
+    return ModalProgressHUD(
+      inAsyncCall: isLoading,
+      child: Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Add New Prosuct'),
+          surfaceTintColor: Colors.transparent,
+          scrolledUnderElevation: 0,
+          backgroundColor: Colors.white,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: addProductMethod(),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+    );
+  }
+
+  Form addProductMethod() {
+    return Form(
+      key: formKey,
+      autovalidateMode: autovalidateMode,
+      child: SingleChildScrollView(
         child: Column(
           spacing: 15,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 100),
             CustomTextFormField(
               hint: 'Product Name',
               onChanged: (data) {
@@ -74,11 +97,47 @@ class _AddProductScreenState extends State<AddProductScreen> {
               },
             ),
             buildDropdownButton(),
-            CustomButton(text: 'ADD', onPressed: () {}),
+            CustomButton(
+              text: 'ADD',
+              onPressed: () async {
+                if (formKey.currentState!.validate()) {
+                  await addProduct();
+
+                  Navigator.pop(context);
+                } else {
+                  autovalidateMode = AutovalidateMode.always;
+                }
+              },
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> addProduct() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      ProductModel newProduct = await AddProductService().addProduct(
+        title: title!,
+        price: price.toString(),
+        description: desc!,
+        image: image!,
+        category: categoryValue ?? '',
+      );
+      setState(() {
+        isLoading = false;
+      });
+      log(newProduct.toString());
+      customSnakBatr(context, message: 'Product added successfully');
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      customSnakBatr(context, message: e.toString());
+    }
   }
 
   SizedBox buildDropdownButton() {
