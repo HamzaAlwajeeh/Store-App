@@ -9,9 +9,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        // surfaceTintColor: Colors.transparent,
-        // scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.white,
         title: Text(
           "New Trend",
           style: TextStyle(
