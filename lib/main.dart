@@ -13,6 +13,23 @@ void main() async {
   //   categoryName: 'electronics',
   // );
   // log(produts.toString());
+  // ProductModel product = await AddProductService().addProduct(
+  //   title: 'New Product',
+  //   price: '29.99',
+  //   description: 'This is a new product',
+  //   image: 'https://example.com/image.jpg',
+  //   category: 'electronics',
+  // );
+  // log(product.toString());
+  // ProductModel updatedProduct = await UpdateProductService().updateProduct(
+  //   id: 20,
+  //   title: "Hamza",
+  //   price: '300',
+  //   description: 'flutter',
+  //   image: 'image.png',
+  //   category: 'cateelectronicsgory',
+  // );
+  // log(updatedProduct.toString());
 }
 
 class StoreApp extends StatelessWidget {
@@ -21,7 +38,6 @@ class StoreApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(useMaterial3: false),
       debugShowCheckedModeBanner: false,
       title: 'Store App',
       home: const HomePage(),
