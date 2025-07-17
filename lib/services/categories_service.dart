@@ -8,6 +8,7 @@ class CategoriesService {
   }) async {
     List<dynamic> data = await Api().get(
       url: '$KBaseUrl/category/$categoryName',
+      token: '',
     );
 
     List<ProductModel> productsList = [];

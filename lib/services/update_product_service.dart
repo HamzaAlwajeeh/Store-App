@@ -19,6 +19,7 @@ class UpdateProductService {
         'image': image,
         'category': category,
       },
+      token: '',
     );
 
     return ProductModel.fromJson(data);

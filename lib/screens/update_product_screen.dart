@@ -87,6 +87,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                         ProductModel updatedproductModel = await updateProduct(
                           productModel,
                         );
+                        log(updatedproductModel.toString());
                         isLoading = false;
                         setState(() {});
                         Navigator.of(context).pop();
