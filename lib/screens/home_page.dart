@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:store_app/widgets/product_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,7 +9,17 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Trend"),
+        // surfaceTintColor: Colors.transparent,
+        // scrolledUnderElevation: 0,
+        title: Text(
+          "New Trend",
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey.shade800,
+            letterSpacing: 1,
+          ),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -17,21 +28,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Container(
-          height: 150,
-          width: 200,
-          decoration: BoxDecoration(),
-          child: Card(
-            child: Column(
-              children: [
-                Text("Store App", style: TextStyle(fontSize: 16)),
-                SizedBox(height: 20),
-              ],
-            ),
-          ),
-        ),
-      ),
+      body: Center(child: ProductCard()),
     );
   }
 }
