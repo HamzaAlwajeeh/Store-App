@@ -28,7 +28,29 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(child: ProductCard()),
+      body: CustomGridView(),
+    );
+  }
+}
+
+class CustomGridView extends StatelessWidget {
+  const CustomGridView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      padding: EdgeInsets.only(top: 50, left: 5, right: 5),
+      clipBehavior: Clip.none,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 15,
+        crossAxisSpacing: 2,
+        childAspectRatio: 1,
+      ),
+      itemBuilder: (context, index) {
+        return Center(child: ProductCard());
+      },
     );
   }
 }
