@@ -5,11 +5,11 @@ class CustomTextFormField extends StatelessWidget {
     super.key,
     this.onChanged,
     required this.hint,
-    required this.value,
+    this.value,
     this.inputType = TextInputType.text,
   });
   final void Function(String)? onChanged;
-  final String hint, value;
+  final String? hint, value;
   final TextInputType? inputType;
 
   @override

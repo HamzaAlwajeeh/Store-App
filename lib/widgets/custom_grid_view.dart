@@ -8,6 +8,7 @@ class CustomGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      physics: BouncingScrollPhysics(),
       shrinkWrap: true,
       padding: EdgeInsets.only(top: 50, left: 5, right: 5),
       clipBehavior: Clip.none,

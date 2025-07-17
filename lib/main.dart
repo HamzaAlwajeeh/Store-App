@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/screens/add_product_screen.dart';
 import 'package:store_app/screens/home_page.dart';
 import 'package:store_app/screens/update_product_screen.dart';
 
@@ -43,7 +44,10 @@ class StoreApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Store App',
       home: const HomePage(),
-      routes: {UpdateProductScreen.route: (context) => UpdateProductScreen()},
+      routes: {
+        UpdateProductScreen.route: (context) => UpdateProductScreen(),
+        AddProductScreen.route: (context) => AddProductScreen(),
+      },
     );
   }
 }

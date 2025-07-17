@@ -5,6 +5,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:store_app/helper/custome_snake_bar.dart';
 import 'package:store_app/models/product_model.dart';
 import 'package:store_app/services/update_product_service.dart';
+import 'package:store_app/widgets/custom_button.dart';
 import 'package:store_app/widgets/custom_form_field.dart';
 
 class UpdateProductScreen extends StatefulWidget {
@@ -77,32 +78,23 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                     },
                   ),
 
-                  SizedBox(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (formKey.currentState!.validate()) {
-                          isLoading = true;
-                          setState(() {});
-                          ProductModel updatedproductModel =
-                              await updateProduct(productModel);
-                          isLoading = false;
-                          setState(() {});
-                          Navigator.of(context).pop();
-                        } else {
-                          autovalidateMode = AutovalidateMode.always;
-                          setState(() {});
-                        }
-                      },
-                      child: Text(
-                        'UPDATE ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
+                  CustomButton(
+                    text: 'UPDATE',
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        isLoading = true;
+                        setState(() {});
+                        ProductModel updatedproductModel = await updateProduct(
+                          productModel,
+                        );
+                        isLoading = false;
+                        setState(() {});
+                        Navigator.of(context).pop();
+                      } else {
+                        autovalidateMode = AutovalidateMode.always;
+                        setState(() {});
+                      }
+                    },
                   ),
                 ],
               ),

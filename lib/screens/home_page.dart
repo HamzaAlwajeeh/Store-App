@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:store_app/screens/add_product_screen.dart';
 import 'package:store_app/services/all_products_service.dart';
 import 'package:store_app/widgets/custom_grid_view.dart';
 
@@ -40,6 +41,12 @@ class HomePage extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(AddProductScreen.route);
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
