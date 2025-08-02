@@ -1,19 +1,15 @@
-import 'dart:developer';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:store_app/cubits/products_cubit/products_cubit.dart';
 import 'package:store_app/helper/custome_snake_bar.dart';
-import 'package:store_app/models/product_model.dart';
-import 'package:store_app/services/add_product_service.dart';
-import 'package:store_app/services/all_categories_service.dart';
 import 'package:store_app/widgets/custom_button.dart';
 import 'package:store_app/widgets/custom_form_field.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
   static String route = '/add-product';
-
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
 }
@@ -22,42 +18,45 @@ class _AddProductScreenState extends State<AddProductScreen> {
   GlobalKey<FormState> formKey = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   String? title, desc, price, image, category;
-  List<dynamic> categories = [];
+  List<dynamic>? categories;
+
   bool isLoading = false;
-  @override
-  void initState() {
-    fechAllCategories();
-    super.initState();
-  }
-
-  Future<List<dynamic>?> fechAllCategories() async {
-    List<dynamic> newCategories =
-        await AllCategoriesService().getAllCategories();
-    setState(() {
-      categories = newCategories;
-    });
-    return null;
-  }
-
   String? categoryValue;
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      inAsyncCall: isLoading,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('Add New Prosuct'),
-          surfaceTintColor: Colors.transparent,
-          scrolledUnderElevation: 0,
-          backgroundColor: Colors.white,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: addProductMethod(),
-        ),
-      ),
+    categories = ModalRoute.of(context)!.settings.arguments as List<dynamic>;
+    return BlocConsumer<ProductsCubit, ProductsState>(
+      listener: (context, state) {
+        if (state is AddProductLoading) {
+          isLoading = true;
+        } else if (state is AddProductSuccess) {
+          customSnakBatr(context, message: 'Product added successfully');
+          BlocProvider.of<ProductsCubit>(context).getAllProducts();
+          isLoading = false;
+          Navigator.pop(context);
+        } else if (state is AddProductFailure) {
+          customSnakBatr(context, message: state.errorMessage);
+          isLoading = false;
+        }
+      },
+      builder:
+          (context, state) => ModalProgressHUD(
+            inAsyncCall: isLoading,
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text('Add New Prosuct'),
+                surfaceTintColor: Colors.transparent,
+                scrolledUnderElevation: 0,
+                backgroundColor: Colors.white,
+              ),
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: addProductMethod(),
+              ),
+            ),
+          ),
     );
   }
 
@@ -101,9 +100,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
               text: 'ADD',
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  await addProduct();
-
-                  Navigator.pop(context);
+                  BlocProvider.of<ProductsCubit>(context).addProduct(
+                    title: title!,
+                    price: price.toString(),
+                    description: desc!,
+                    image: image!,
+                    category: categoryValue ?? '',
+                  );
                 } else {
                   autovalidateMode = AutovalidateMode.always;
                 }
@@ -113,31 +116,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> addProduct() async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      ProductModel newProduct = await AddProductService().addProduct(
-        title: title!,
-        price: price.toString(),
-        description: desc!,
-        image: image!,
-        category: categoryValue ?? '',
-      );
-      setState(() {
-        isLoading = false;
-      });
-      log(newProduct.toString());
-      customSnakBatr(context, message: 'Product added successfully');
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      customSnakBatr(context, message: e.toString());
-    }
   }
 
   SizedBox buildDropdownButton() {
@@ -169,10 +147,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
             hint: Text('Select Category', style: TextStyle(fontSize: 18)),
             isExpanded: true,
             items:
-                categories
+                categories!
                     .map(
                       (item) => DropdownMenuItem<String>(
-                        value: item as String,
+                        value: item,
                         child: Text(
                           item.toString(),
                           style: const TextStyle(fontSize: 14),

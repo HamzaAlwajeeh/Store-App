@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/cubits/products_cubit/products_cubit.dart';
 import 'package:store_app/models/product_model.dart';
 import 'package:store_app/widgets/product_card.dart';
 
 class CustomGridView extends StatelessWidget {
-  const CustomGridView({super.key, required this.products});
-  final List<ProductModel> products;
+  const CustomGridView({super.key});
   @override
   Widget build(BuildContext context) {
+    List<ProductModel> products =
+        BlocProvider.of<ProductsCubit>(context).products;
     return GridView.builder(
       physics: BouncingScrollPhysics(),
       shrinkWrap: true,

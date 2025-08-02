@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/cubits/categories_cubit/categories_cubit.dart';
+import 'package:store_app/cubits/products_cubit/products_cubit.dart';
 import 'package:store_app/screens/add_product_screen.dart';
 import 'package:store_app/screens/home_page.dart';
 import 'package:store_app/screens/update_product_screen.dart';
+import 'package:store_app/simple_bloc_obsever.dart';
 
 void main() async {
+  Bloc.observer = SimpleBlocObsever();
   runApp(const StoreApp());
   // List<ProductModel> produts = [];
   // produts = await AllProductsService().getAllProducts();
@@ -39,15 +44,21 @@ class StoreApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: 'Poppins'),
-      debugShowCheckedModeBanner: false,
-      title: 'Store App',
-      home: const HomePage(),
-      routes: {
-        UpdateProductScreen.route: (context) => UpdateProductScreen(),
-        AddProductScreen.route: (context) => AddProductScreen(),
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ProductsCubit()..getAllProducts()),
+        BlocProvider(create: (context) => CategoriesCubit()),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: 'Poppins'),
+        debugShowCheckedModeBanner: false,
+        title: 'Store App',
+        home: const HomePage(),
+        routes: {
+          UpdateProductScreen.route: (context) => UpdateProductScreen(),
+          AddProductScreen.route: (context) => AddProductScreen(),
+        },
+      ),
     );
   }
 }
