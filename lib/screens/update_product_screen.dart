@@ -64,6 +64,17 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                   spacing: 15,
                   children: [
                     Image.network(productModel.image, height: 300),
+                    Text(
+                      productModel.title,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      productModel.description,
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
                     CustomTextFormField(
                       hint: 'Product Name',
                       value: productModel.title,
@@ -112,6 +123,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                         }
                       },
                     ),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
